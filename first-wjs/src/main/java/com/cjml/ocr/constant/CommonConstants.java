@@ -23,4 +23,8 @@ public interface CommonConstants {
     String END_TIME = "end-time";
     String ALIGN_DIR = "align-dir";
     String ALIGN_FILE = "align-file";
+    String ALIGN_REC_FILE = "align-rec-file";
+    String ALIGN_DET_FILE = "align-det-file";
+    String ALIGN_REC_DIR = "align-rec-dir";
+    String ALIGN_DET_DIR = "align-det-dir";
 }

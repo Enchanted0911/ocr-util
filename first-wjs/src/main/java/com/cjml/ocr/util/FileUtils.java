@@ -36,14 +36,10 @@ public class FileUtils {
     /**
      * 获取文件下的所有文件名
      *
-     * @param fileDirProperties 文件属性配置文件
-     * @param dirKey            配置文件key
+     * @param fileDir            文件目录
      * @return 所有文件名集合
      */
-    public static List<String> gainAllFileName(String fileDirProperties, String dirKey) {
-        // 获取目录
-        String fileDir = ResourceUtils.gainValueByKey(fileDirProperties, dirKey);
-
+    public static List<String> gainAllFileName(String fileDir) {
         // 列出目录的所有文件名
         File file = new File(fileDir);
         return Arrays.stream(Objects.requireNonNull(file.list())).collect(Collectors.toList());
