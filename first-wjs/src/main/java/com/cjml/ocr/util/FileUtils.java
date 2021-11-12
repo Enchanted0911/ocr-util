@@ -59,7 +59,8 @@ public class FileUtils {
                 .filter(twoList::contains).collect(Collectors.toList());
 
         // 交集排除公共文件
-        return interSectionList.stream().filter(i -> !commonList.contains(i)).collect(Collectors.toList());
+        return interSectionList.stream()
+                .filter(i -> commonList.stream().noneMatch(i::contains)).collect(Collectors.toList());
     }
 
     /**

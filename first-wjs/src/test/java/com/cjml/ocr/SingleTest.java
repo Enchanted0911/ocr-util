@@ -26,6 +26,22 @@ import java.util.stream.Stream;
  */
 public class SingleTest {
 
+    String trainDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.TRAIN_DET_DIR_KEY);
+    String evalDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.EVAL_DET_DIR_KEY);
+    String testDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.TEST_DIR_KEY);
+    String detLabelPath = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.EVAL_DET_LABEL_KEY);
+    String recDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.EVAL_REC_DIR_KEY);
+
+
+    String alignRecDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.ALIGN_EVAL_REC_DIR);
+    String alignDetDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.ALIGN_EVAL_DET_DIR);
+    String alignDetFile = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.ALIGN_EVAL_DET_FILE);
+    String alignRecFile = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.ALIGN_EVAL_REC_FILE);
+
+
+    String alignFile = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.ALIGN_FILE);
+    String alignDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.ALIGN_DIR);
+
     @Test
     public void oneTest() {
         ResourceBundle resourceBundle = ResourceBundle.getBundle(CommonConstants.FILE_DIR_PROPERTIES);
@@ -53,13 +69,11 @@ public class SingleTest {
 
     @Test
     public void threeTest() {
-        String trainDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.TRAIN_DIR_KEY);
         System.out.println(trainDir);
     }
 
     @Test
     public void showFileContentTest() {
-        String testDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.TEST_DIR_KEY);
         System.out.println(testDir);
         File testFile = new File(testDir);
         List<String> trainFileList = Arrays.stream(testFile.list()).collect(Collectors.toList());
@@ -69,9 +83,7 @@ public class SingleTest {
     @Test
     public void readFileContentTest() {
         AtomicInteger i = new AtomicInteger();
-        String detDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.DET_LABEL_KEY);
-        String recDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.REC_LABEL_KEY);
-        System.out.println(detDir);
+        System.out.println(detLabelPath);
         Stream<String> lines = null;
         try {
             lines = Files.lines(Paths.get("C:\\Users\\Administrator\\Desktop\\old_pic_2\\newLabel.txt"));
@@ -86,14 +98,14 @@ public class SingleTest {
     @Test
     public void showRecInter() {
         // 分别列出两个目录的所有文件名
-        List<String> trainFileList = FileUtils.gainAllFileName(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.TRAIN_DIR_KEY);
-        List<String> evalFileList = FileUtils.gainAllFileName(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.EVAL_DIR_KEY);
+        List<String> trainFileList = FileUtils.gainAllFileName(trainDir);
+        List<String> evalFileList = FileUtils.gainAllFileName(evalDir);
 
         // 求文件名交集
         List<String> interSectionList = FileUtils.gainIntersection(trainFileList, evalFileList);
 
         // 获取rec目录下的文件
-        List<String> recFileList = FileUtils.gainAllFileName(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.REC_DIR_KEY);
+        List<String> recFileList = FileUtils.gainAllFileName(recDir);
 
         // 获取rec数据集中的由以上代码得出的交集部分产生的图片
         List<String> recIntersectionList = recFileList.stream().filter(r -> interSectionList.stream()
@@ -106,12 +118,11 @@ public class SingleTest {
 
     @Test
     public void writeFileContentTest() {
-        String detLabelDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.DET_LABEL_KEY);
-        File detLabelFile = new File(detLabelDir);
+        File detLabelFile = new File(detLabelPath);
         String detLabelParentDir = detLabelFile.getParent();
         Stream<String> lines = null;
         try {
-            lines = Files.lines(Paths.get(detLabelDir));
+            lines = Files.lines(Paths.get(detLabelPath));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -125,9 +136,10 @@ public class SingleTest {
             }
             fileWriter = new FileWriter(newFile);
             FileWriter finalFileWriter = fileWriter;
+            assert lines != null;
             lines.forEach(l -> {
                 try {
-                    finalFileWriter.append(l + "\n");
+                    finalFileWriter.append(l).append("\n");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -143,19 +155,5 @@ public class SingleTest {
                 }
             }
         }
-    }
-
-    @Test
-    public void cleanLabelTest() {
-        String detLabelDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.DET_LABEL_KEY);
-
-        // 分别列出两个目录的所有文件名
-        List<String> trainFileList = FileUtils.gainAllFileName(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.TRAIN_DIR_KEY);
-        List<String> evalFileList = FileUtils.gainAllFileName(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.EVAL_DIR_KEY);
-
-        // 求文件名交集
-        List<String> interSectionList = FileUtils.gainIntersection(trainFileList, evalFileList);
-
-        FileUtils.writeNewFileLabel(detLabelDir, interSectionList);
     }
 }
