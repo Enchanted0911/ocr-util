@@ -35,19 +35,25 @@ public class Single {
 //        alignLabelAndDataSet();
 //        singleDetTrainEval();
 //        fullClean();
-        halfClean();
+//        halfClean();
+//        simpleSingleDetTrainEval(trainDetDir, evalDetDir, evalDetLabelPath);
+//        regularizeDirInLabelFile(evalDetLabelPath, "0");
+        alignLabelAndDataSet(alignTrainDetFile, alignTrainDetDir);
     }
+
+
+
 
     public static void fullClean() {
 
         // 先去交集
         singleDetTrainEval(trainDetDir, evalDetDir, evalRecDir, evalDetLabelPath, evalRecLabelPath);
 
-        // 再对齐eval和train的det和rec的数据
+        // 再对齐eval和train的det和rec的数据 以det为准
         alignDetAndRecDataSet(alignEvalDetDir, alignEvalRecDir);
         alignDetAndRecDataSet(alignTrainDetDir, alignTrainRecDir);
 
-        // 分别对齐det和rec的label和data
+        // 分别对齐det和rec的label和data 以data为准
         alignLabelAndDataSet(alignEvalRecFile, alignEvalRecDir);
         alignLabelAndDataSet(alignEvalDetFile, alignEvalDetDir);
 
@@ -159,5 +165,50 @@ public class Single {
         System.out.println("rec - det 差集文件数量 : " + subList.size());
         // 删除rec中的差集文件
         FileUtils.removeFiles(subList, recDir);
+    }
+
+    /**
+     * 针对检测模型的简单版本去交集
+     *
+     * @param trainDir 训练图片目录
+     * @param evalDir 验证图片目录
+     * @param evalDetLabelPath 验证标签路径
+     */
+    public static void simpleSingleDetTrainEval(String trainDir, String evalDir, String evalDetLabelPath) {
+
+        // 分别列出两个目录的所有文件名
+        List<String> trainFileList = FileUtils.gainAllFileName(trainDir);
+        List<String> evalFileList = FileUtils.gainAllFileName(evalDir);
+
+        // 求文件名交集
+        List<String> interSectionList = FileUtils.gainIntersection(trainFileList, evalFileList);
+
+        System.out.println(trainDir + " 下文件数量 : " + trainFileList.size());
+        System.out.println(evalDir + " 下文件数量 : " + evalFileList.size());
+        System.out.println("交集文件数量 : " + interSectionList.size());
+        // 删除其中一个目录下交集中的文件
+        FileUtils.removeFiles(interSectionList, evalDir);
+
+        // 修改其中一个label中的交集信息标签
+        FileUtils.writeNewFileLabel(evalDetLabelPath, interSectionList);
+    }
+
+    /**
+     * 规则化标签文件中记录标签的父目录
+     *
+     * @param filepath 标签文件路径
+     * @param parentDirName 规则化后的父目录名
+     */
+    public static void regularizeDirInLabelFile(String filepath, String parentDirName) {
+        Stream<String> lines = FileUtils.gainFileContent(filepath);
+
+        assert lines != null;
+        Stream<String> newLines = lines.map(l -> parentDirName + l.substring(l.indexOf('/')));
+
+        File oldLabelFile = new File(filepath);
+
+        // 写入新文件
+        File newFile = new File(oldLabelFile.getParent() + "/new" + oldLabelFile.getName());
+        FileUtils.writeLinesToNewFile(newFile, newLines);
     }
 }
