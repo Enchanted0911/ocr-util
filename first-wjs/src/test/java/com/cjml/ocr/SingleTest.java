@@ -39,9 +39,6 @@ public class SingleTest {
     String alignRecFile = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.ALIGN_EVAL_REC_FILE);
 
 
-    String alignFile = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.ALIGN_FILE);
-    String alignDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.ALIGN_DIR);
-
     @Test
     public void oneTest() {
         ResourceBundle resourceBundle = ResourceBundle.getBundle(CommonConstants.FILE_DIR_PROPERTIES);
@@ -82,6 +79,7 @@ public class SingleTest {
 
     @Test
     public void readFileContentTest() {
+
         AtomicInteger i = new AtomicInteger();
         System.out.println(detLabelPath);
         Stream<String> lines = null;
@@ -155,5 +153,10 @@ public class SingleTest {
                 }
             }
         }
+    }
+
+    @Test
+    public void regularDir() {
+        Single.regularizeDirInLabelFile("C:\\Users\\Administrator\\Desktop\\gamma_rec_eval\\rec_gt.txt", "rec_data");
     }
 }

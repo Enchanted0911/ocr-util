@@ -12,6 +12,7 @@ public interface CommonConstants {
     String TEST_DIR_KEY = "test-dir";
     String EVAL_REC_DIR_KEY = "eval-rec-dir";
     String EVAL_DET_LABEL_KEY = "eval-det-label-file";
+    String TRAIN_REC_LABEL_KEY = "train-rec-label-file";
     String EVAL_REC_LABEL_KEY = "eval-rec-label-file";
     String CACHE_CACH = "Cache.cach";
     String CROP_IMG = "crop_img";

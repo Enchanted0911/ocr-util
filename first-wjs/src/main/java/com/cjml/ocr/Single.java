@@ -34,11 +34,11 @@ public class Single {
     public static void main(String[] args) {
 //        alignLabelAndDataSet();
 //        singleDetTrainEval();
-//        fullClean();
+        fullClean();
 //        halfClean();
 //        simpleSingleDetTrainEval(trainDetDir, evalDetDir, evalDetLabelPath);
-//        regularizeDirInLabelFile(evalDetLabelPath, "0");
-        alignLabelAndDataSet(alignTrainDetFile, alignTrainDetDir);
+//        regularizeDirInLabelFile(alignTrainRecFile, "rec_data");
+//        alignLabelAndDataSet(alignTrainDetFile, alignTrainDetDir);
     }
 
 
@@ -84,18 +84,8 @@ public class Single {
      */
     public static void singleDetTrainEval(String trainDir, String evalDir, String evalRecDir, String evalDetLabelPath, String evalRecLabelPath) {
 
-        // 分别列出两个目录的所有文件名
-        List<String> trainFileList = FileUtils.gainAllFileName(trainDir);
-        List<String> evalFileList = FileUtils.gainAllFileName(evalDir);
-
-        // 求文件名交集
-        List<String> interSectionList = FileUtils.gainIntersection(trainFileList, evalFileList);
-
-        System.out.println(trainDir + " 下文件数量 : " + trainFileList.size());
-        System.out.println(evalDir + " 下文件数量 : " + evalFileList.size());
-        System.out.println("交集文件数量 : " + interSectionList.size());
-        // 删除其中一个目录下交集中的文件
-        FileUtils.removeFiles(interSectionList, evalDir);
+        // 删除det的交集
+        List<String> interSectionList = cleanIntersection(trainDir, evalDir);
 
         // 获取rec目录下的文件
         List<String> recFileList = FileUtils.gainAllFileName(evalRecDir);
@@ -208,7 +198,31 @@ public class Single {
         File oldLabelFile = new File(filepath);
 
         // 写入新文件
-        File newFile = new File(oldLabelFile.getParent() + "/new" + oldLabelFile.getName());
+        File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
         FileUtils.writeLinesToNewFile(newFile, newLines);
+    }
+
+    /**
+     * 删除其中一个目录中的交集文件
+     *
+     * @param trainDir 训练数据目录
+     * @param evalDir 验证数据目录
+     * @return 交集文件名list
+     */
+    public static List<String> cleanIntersection(String trainDir, String evalDir) {
+        // 分别列出两个目录的所有文件名
+        List<String> trainFileList = FileUtils.gainAllFileName(trainDir);
+        List<String> evalFileList = FileUtils.gainAllFileName(evalDir);
+
+        // 求文件名交集
+        List<String> interSectionList = FileUtils.gainIntersection(trainFileList, evalFileList);
+
+        System.out.println(trainDir + " 下文件数量 : " + trainFileList.size());
+        System.out.println(evalDir + " 下文件数量 : " + evalFileList.size());
+        System.out.println("交集文件数量 : " + interSectionList.size());
+        // 删除其中一个目录下交集中的文件
+        FileUtils.removeFiles(interSectionList, evalDir);
+
+        return interSectionList;
     }
 }

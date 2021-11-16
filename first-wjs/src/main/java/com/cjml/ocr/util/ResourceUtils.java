@@ -1,7 +1,5 @@
 package com.cjml.ocr.util;
 
-import com.cjml.ocr.constant.CommonConstants;
-
 import java.util.ResourceBundle;
 
 /**
