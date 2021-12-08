@@ -95,7 +95,7 @@ public class FileUtils {
         Stream<String> lines = gainFileContent(oldLabelFile);
 
         // 创建新文件, 并写入信息
-        File newFile = new File(detLabelParentDir + "/" + detFileName);
+        File newFile = new File(detLabelParentDir + "/new" + detFileName);
         assert lines != null;
         lines = lines.filter(l -> intersectionList.stream().noneMatch(l::contains));
         writeLinesToNewFile(newFile, lines);

@@ -5,7 +5,11 @@ import com.cjml.ocr.util.FileUtils;
 import com.cjml.ocr.util.ResourceUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
+import java.util.concurrent.TransferQueue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -184,7 +188,7 @@ public class Single {
     }
 
     /**
-     * 规则化标签文件中记录标签的父目录
+     * 规则化标签文件中记录标签的父目录, 并且去除相同的记录
      *
      * @param filepath 标签文件路径
      * @param parentDirName 规则化后的父目录名
@@ -193,7 +197,10 @@ public class Single {
         Stream<String> lines = FileUtils.gainFileContent(filepath);
 
         assert lines != null;
-        Stream<String> newLines = lines.map(l -> parentDirName + l.substring(l.indexOf('/')));
+        Stream<String> newLines = lines.map(l -> parentDirName + l.substring(l.indexOf('/')))
+                .collect(Collectors.collectingAndThen(Collectors
+                        .toCollection(() -> new TreeSet<>(Comparator
+                                .comparing(s -> s.substring(0, s.indexOf('.'))))), ArrayList::new)).stream();
 
         File oldLabelFile = new File(filepath);
 
@@ -201,6 +208,25 @@ public class Single {
         File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
         FileUtils.writeLinesToNewFile(newFile, newLines);
     }
+
+//    /**
+//     * 规则化标签文件中记录标签的父目录
+//     *
+//     * @param filepath 标签文件路径
+//     * @param parentDirName 规则化后的父目录名
+//     */
+//    public static void regularizeDirInLabelFile(String filepath, String parentDirName) {
+//        Stream<String> lines = FileUtils.gainFileContent(filepath);
+//
+//        assert lines != null;
+//        Stream<String> newLines = lines.map(l -> parentDirName + l.substring(l.indexOf('/')));
+//
+//        File oldLabelFile = new File(filepath);
+//
+//        // 写入新文件
+//        File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
+//        FileUtils.writeLinesToNewFile(newFile, newLines);
+//    }
 
     /**
      * 删除其中一个目录中的交集文件
