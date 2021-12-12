@@ -15,11 +15,12 @@ import java.util.List;
  */
 public class PreProcess {
 
-    public static String classDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.CLASS_DIR);
+    public static String trainClassDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.TRAIN_CLASS_DIR);
+    public static String evalClassDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.EVAL_CLASS_DIR);
 
 
     public static void main(String[] args) {
-        dataSetProcess(classDir);
+        dataSetProcess(trainClassDir);
     }
 
     /**

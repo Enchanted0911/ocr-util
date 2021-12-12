@@ -5,6 +5,7 @@ package com.cjml.clas.constant;
  * @date 2021-12-12
  */
 public interface CommonConstants {
-    String CLASS_DIR = "class-dir";
+    String TRAIN_CLASS_DIR = "train-class-dir";
+    String EVAL_CLASS_DIR = "eval-class-dir";
     String FILE_DIR_PROPERTIES = "filedir";
 }
