@@ -20,7 +20,9 @@ public class PreProcess {
 
 
     public static void main(String[] args) {
+        FileUtils.separateFile(trainClassDir, evalClassDir);
         dataSetProcess(trainClassDir);
+        dataSetProcess(evalClassDir);
     }
 
     /**
