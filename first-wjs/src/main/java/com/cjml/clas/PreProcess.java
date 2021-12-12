@@ -33,31 +33,14 @@ public class PreProcess {
         List<File> fileList = new ArrayList<>();
         List<String> fileLabelList = new ArrayList<>();
 
-        gainAllFile(file, fileList);
+        FileUtils.gainAllFile(file, fileList);
         processFilename(fileList, fileLabelList);
 
         File newFile = new File(classDir + CharConstant.SLASH + "Label.txt");
         FileUtils.writeLinesToNewFile(newFile, fileLabelList.stream());
     }
 
-    /**
-     * 递归获取文件目录下的所有文件
-     *
-     * @param fileDir 文件目录
-     * @param fileList 该文件目录下的所有文件, 包含子文件
-     */
-    public static void gainAllFile(File fileDir, List<File> fileList) {
-        File[] fs = fileDir.listFiles();
-        assert fs != null;
-        for (File f : fs) {
-            if (f.isDirectory()) {
-                gainAllFile(f, fileList);
-            }
-            if (f.isFile()) {
-                fileList.add(f);
-            }
-        }
-    }
+
 
     /**
      * 以上级文件夹名作为文件标签, 处理文件为文件标签

@@ -1,12 +1,14 @@
 package com.cjml.util;
 
 
+import com.cjml.clas.constant.CharConstant;
 import com.cjml.ocr.constant.CommonConstants;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -146,6 +148,46 @@ public class FileUtils {
                     fileWriter.close();
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 递归获取文件目录下的所有文件
+     *
+     * @param fileDir 文件目录
+     * @param fileList 该文件目录下的所有文件, 包含子文件
+     */
+    public static void gainAllFile(File fileDir, List<File> fileList) {
+        File[] fs = fileDir.listFiles();
+        assert fs != null;
+        for (File f : fs) {
+            if (f.isDirectory()) {
+                gainAllFile(f, fileList);
+            }
+            if (f.isFile()) {
+                fileList.add(f);
+            }
+        }
+    }
+
+    public static void separateFile(String originFileDir, String desFileDir) {
+        File originFile = new File(originFileDir);
+        File[] fs = originFile.listFiles();
+        for (int i = 0; i < Objects.requireNonNull(fs).length; i++) {
+            Path path = Paths.get(desFileDir + CharConstant.SLASH + fs[i].getName());
+            Path pathCreate = null;
+            try {
+                pathCreate = Files.createDirectory(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            File[] fileList = fs[i].listFiles();
+            for (int j = 0; j < Objects.requireNonNull(fileList).length; j++) {
+                if (j % 3 == 0) {
+                    File toFile = new File(pathCreate + CharConstant.SLASH + fileList[j].getName());
+                    fileList[j].renameTo(toFile);
                 }
             }
         }
