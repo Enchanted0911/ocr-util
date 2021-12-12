@@ -1,6 +1,6 @@
 package com.cjml.ocr;
 
-import com.cjml.ocr.util.TimeUtils;
+import com.cjml.util.TimeUtils;
 import org.junit.Test;
 
 public class TimeTest {

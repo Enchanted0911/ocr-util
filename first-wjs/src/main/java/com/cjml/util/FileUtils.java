@@ -1,4 +1,4 @@
-package com.cjml.ocr.util;
+package com.cjml.util;
 
 
 import com.cjml.ocr.constant.CommonConstants;

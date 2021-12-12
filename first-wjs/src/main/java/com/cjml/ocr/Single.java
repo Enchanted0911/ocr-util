@@ -1,15 +1,14 @@
 package com.cjml.ocr;
 
 import com.cjml.ocr.constant.CommonConstants;
-import com.cjml.ocr.util.FileUtils;
-import com.cjml.ocr.util.ResourceUtils;
+import com.cjml.util.FileUtils;
+import com.cjml.util.ResourceUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
-import java.util.concurrent.TransferQueue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

@@ -22,8 +22,6 @@ public interface CommonConstants {
     String TXT = ".txt";
     String START_TIME = "start-time";
     String END_TIME = "end-time";
-    String ALIGN_DIR = "align-dir";
-    String ALIGN_FILE = "align-file";
     String ALIGN_EVAL_REC_FILE = "align-eval-rec-file";
     String ALIGN_EVAL_DET_FILE = "align-eval-det-file";
     String ALIGN_EVAL_REC_DIR = "align-eval-rec-dir";

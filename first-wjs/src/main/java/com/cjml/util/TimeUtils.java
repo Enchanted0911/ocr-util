@@ -1,6 +1,7 @@
-package com.cjml.ocr.util;
+package com.cjml.util;
 
 import com.cjml.ocr.constant.CommonConstants;
+import com.cjml.util.ResourceUtils;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

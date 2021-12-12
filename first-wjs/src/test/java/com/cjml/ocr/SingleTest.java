@@ -1,8 +1,8 @@
 package com.cjml.ocr;
 
 import com.cjml.ocr.constant.CommonConstants;
-import com.cjml.ocr.util.FileUtils;
-import com.cjml.ocr.util.ResourceUtils;
+import com.cjml.util.FileUtils;
+import com.cjml.util.ResourceUtils;
 import org.junit.Test;
 
 import java.io.File;
