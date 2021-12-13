@@ -17,12 +17,22 @@ public class PreProcess {
 
     public static String trainClassDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.TRAIN_CLASS_DIR);
     public static String evalClassDir = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.EVAL_CLASS_DIR);
+    public static String trainFilterChineseLabelPath = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.FILTER_TRAIN_CHINESE_PATH);
+    public static String evalFilterChineseLabelPath = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.FILTER_EVAL_CHINESE_PATH);
 
 
     public static void main(String[] args) {
+
+        // 分割训练集和评估集
         FileUtils.separateFile(trainClassDir, evalClassDir);
+
+        // 生成标注文件
         dataSetProcess(trainClassDir);
         dataSetProcess(evalClassDir);
+
+        // 去除中文标签
+        FileUtils.filterChinese(trainFilterChineseLabelPath);
+        FileUtils.filterChinese(evalFilterChineseLabelPath);
     }
 
     /**
@@ -54,7 +64,9 @@ public class PreProcess {
         fileList.forEach(f -> {
             String fileClass = f.getParent().substring(f.getParent().lastIndexOf(File.separator) + 1);
             String fileLabel = fileClass + CharConstant.SLASH + f.getName() + CharConstant.SPACE_CHAR + fileClass;
-            fileLabelList.add(fileLabel);
+            if (!f.getName().equals(CommonConstants.THUMBS)) {
+                fileLabelList.add(fileLabel);
+            }
         });
     }
 }

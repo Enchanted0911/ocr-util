@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,7 +40,7 @@ public class FileUtils {
     /**
      * 获取文件下的所有文件名
      *
-     * @param fileDir            文件目录
+     * @param fileDir 文件目录
      * @return 所有文件名集合
      */
     public static List<String> gainAllFileName(String fileDir) {
@@ -81,7 +83,7 @@ public class FileUtils {
     /**
      * 在旧标签文件下创建新文件, 并将没有重复信息的标签信息写入文本文件
      *
-     * @param oldLabelFile      可能存在交集信息的旧标签文件
+     * @param oldLabelFile     可能存在交集信息的旧标签文件
      * @param intersectionList 交集信息集合
      */
     public static void writeNewFileLabel(String oldLabelFile, List<String> intersectionList) {
@@ -122,7 +124,7 @@ public class FileUtils {
      * 将流中的信息写入文件
      *
      * @param newFile 待写入的文件
-     * @param lines 流中的行信息
+     * @param lines   流中的行信息
      */
     public static void writeLinesToNewFile(File newFile, Stream<String> lines) {
         FileWriter fileWriter = null;
@@ -156,7 +158,7 @@ public class FileUtils {
     /**
      * 递归获取文件目录下的所有文件
      *
-     * @param fileDir 文件目录
+     * @param fileDir  文件目录
      * @param fileList 该文件目录下的所有文件, 包含子文件
      */
     public static void gainAllFile(File fileDir, List<File> fileList) {
@@ -185,11 +187,24 @@ public class FileUtils {
             }
             File[] fileList = fs[i].listFiles();
             for (int j = 0; j < Objects.requireNonNull(fileList).length; j++) {
-                if (j % 3 == 0) {
+                if (j % 6 == 0) {
                     File toFile = new File(pathCreate + CharConstant.SLASH + fileList[j].getName());
                     fileList[j].renameTo(toFile);
                 }
             }
         }
+    }
+
+    public static void filterChinese(String labelPath) {
+        Stream<String> fileContent = gainFileContent(labelPath);
+        Stream<String> filterList = fileContent.filter(s -> {
+            Pattern p = Pattern.compile(com.cjml.clas.constant.CommonConstants.REGEX_CHINESE);
+            Matcher m = p.matcher(s);
+            return !m.find();
+        });
+
+        File labelFile = new File(labelPath);
+        File newFile = new File(labelFile.getParent() + "/new_" + labelFile.getName());
+        writeLinesToNewFile(newFile, filterList);
     }
 }
