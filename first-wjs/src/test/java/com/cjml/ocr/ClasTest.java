@@ -23,7 +23,9 @@ public class ClasTest {
 
     @Test
     public void filterChinese() {
-        FileUtils.filterChinese(trainFilterChineseLabelPath);
-        FileUtils.filterChinese(evalFilterChineseLabelPath);
+//        FileUtils.filterChinese(trainFilterChineseLabelPath);
+//        FileUtils.filterChinese(evalFilterChineseLabelPath);
+        FileUtils.filterChinese("D:\\wjs\\detection_data_set\\alpha\\train.txt");
+        FileUtils.filterChinese("D:\\wjs\\detection_data_set\\alpha\\eval.txt");
     }
 }

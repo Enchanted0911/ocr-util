@@ -174,6 +174,12 @@ public class FileUtils {
         }
     }
 
+    /**
+     * 将数据分成训练集和评估集
+     *
+     * @param originFileDir 原始数据目录
+     * @param desFileDir 目的数据目录
+     */
     public static void separateFile(String originFileDir, String desFileDir) {
         File originFile = new File(originFileDir);
         File[] fs = originFile.listFiles();
@@ -195,8 +201,14 @@ public class FileUtils {
         }
     }
 
+    /**
+     * 去除标签文件中的带有中文的标注记录
+     *
+     * @param labelPath 标签文件路径
+     */
     public static void filterChinese(String labelPath) {
         Stream<String> fileContent = gainFileContent(labelPath);
+        assert fileContent != null;
         Stream<String> filterList = fileContent.filter(s -> {
             Pattern p = Pattern.compile(com.cjml.clas.constant.CommonConstants.REGEX_CHINESE);
             Matcher m = p.matcher(s);
@@ -206,5 +218,44 @@ public class FileUtils {
         File labelFile = new File(labelPath);
         File newFile = new File(labelFile.getParent() + "/new_" + labelFile.getName());
         writeLinesToNewFile(newFile, filterList);
+    }
+
+    /**
+     * 通过字符串形式的文件路径, 获取带有后缀的完整文件名
+     *
+     * @param filePath 文件路径
+     * @return 带有文件类型后缀的文件名
+     */
+    public static String gainFullFileName(String filePath) {
+        return filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+    }
+
+    /**
+     * 通过字符串形式的文件路径, 获取不带有后缀的完整文件名
+     *
+     * @param filePath 文件路径
+     * @return 不带有文件类型后缀的文件名
+     */
+    public static String gainJustFileName(String filePath) {
+        String fullFileName = gainFullFileName(filePath);
+        return fullFileName.substring(0, fullFileName.lastIndexOf(com.cjml.constant.CommonConstants.DOT));
+    }
+
+    public static void processXmlFile(String labelPath, String editLabelOne, String editLabelTwo, String newLabel) {
+        List<String> list = FileUtils.gainAllFileName(labelPath);
+
+        list.forEach(x -> {
+            Stream<String> content = FileUtils.gainFileContent(labelPath  + com.cjml.constant.CommonConstants.SLASH + x);
+            List<String> fixedContent = new ArrayList<>();
+            assert content != null;
+            content.forEach(i -> {
+                if (i.contains(editLabelOne) || i.contains(editLabelTwo)) {
+                    i = i.substring(0, i.indexOf('>') + 1) + newLabel + i.substring(i.lastIndexOf('<'));
+                }
+                fixedContent.add(i);
+            });
+            File newFile = new File(labelPath + com.cjml.constant.CommonConstants.SLASH + x);
+            FileUtils.writeLinesToNewFile(newFile, fixedContent.stream());
+        });
     }
 }

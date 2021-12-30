@@ -157,9 +157,10 @@ public class SingleTest {
 
     @Test
     public void regularDir() {
-        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\process_eval\\rec_gt.txt", "rec_data");
-        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\process_train\\rec_gt.txt", "rec_data");
-        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\process_eval\\Label.txt", "det_data");
-        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\process_train\\Label.txt", "det_data");
+        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\alpha_eval\\rec_gt.txt", "rec_data");
+        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\alpha_train\\rec_gt.txt", "rec_data");
+        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\alpha_eval\\Label.txt", "det_data");
+        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\alpha_train\\Label.txt", "det_data");
+//        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\ft_rec\\ft.txt", "crop_img");
     }
 }
