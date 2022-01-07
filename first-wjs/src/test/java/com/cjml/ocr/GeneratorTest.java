@@ -18,10 +18,10 @@ public class GeneratorTest {
 
     @Test
     public void twoTest() {
-        String path = "D:\\wjs\\detection_data_set\\annotation\\4045";
-        String one = "<name>";
-        String two = "<folder>";
-        String labelName = "4045";
+        String path = "D:\\wjs\\detection_data_set\\alpha\\annotations\\4315";
+        String one = "<difficult>";
+        String two = "<wujunshengwujunsheng>";
+        String labelName = "0";
 
         FileUtils.processXmlFile(path, one, two, labelName);
 
