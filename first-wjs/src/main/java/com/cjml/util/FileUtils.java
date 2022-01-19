@@ -241,6 +241,15 @@ public class FileUtils {
         return fullFileName.substring(0, fullFileName.lastIndexOf(com.cjml.constant.CommonConstants.DOT));
     }
 
+    /**
+     * 将xml文件中的两个特定标签修改为特定值
+     * 针对detection数据标签的清洗
+     *
+     * @param labelPath 标签路径
+     * @param editLabelOne 待修改标签一
+     * @param editLabelTwo 待修改标签二
+     * @param newLabel 修改后标签
+     */
     public static void processXmlFile(String labelPath, String editLabelOne, String editLabelTwo, String newLabel) {
         List<String> list = FileUtils.gainAllFileName(labelPath);
 
