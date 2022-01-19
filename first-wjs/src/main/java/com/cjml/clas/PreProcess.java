@@ -31,8 +31,8 @@ public class PreProcess {
         dataSetProcess(evalClassDir);
 
         // 去除中文标签
-        FileUtils.filterChinese(trainFilterChineseLabelPath);
-        FileUtils.filterChinese(evalFilterChineseLabelPath);
+//        FileUtils.filterChinese(trainFilterChineseLabelPath);
+//        FileUtils.filterChinese(evalFilterChineseLabelPath);
     }
 
     /**
