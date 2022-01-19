@@ -208,6 +208,48 @@ public class Single {
         FileUtils.writeLinesToNewFile(newFile, newLines);
     }
 
+    /**
+     * 功能同上, 只不过这是针对特殊数据标签处理的, 有些数据标签没有父目录, 这个添加父目录
+     *
+     * @param filepath 同上
+     * @param parentDirName 同上
+     * @param flag 仅做重载区分
+     */
+    public static void regularizeDirInLabelFile(String filepath, String parentDirName, boolean flag) {
+        Stream<String> lines = FileUtils.gainFileContent(filepath);
+
+        assert lines != null;
+        Stream<String> newLines = lines.map(l -> parentDirName + com.cjml.constant.CommonConstants.SLASH + l)
+                .collect(Collectors.collectingAndThen(Collectors
+                        .toCollection(() -> new TreeSet<>(Comparator
+                                .comparing(s -> s.substring(0, s.indexOf('.'))))), ArrayList::new)).stream();
+
+        File oldLabelFile = new File(filepath);
+
+        // 写入新文件
+        File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
+        FileUtils.writeLinesToNewFile(newFile, newLines);
+    }
+
+    /**
+     * 修改标签文件中的空格为制表符
+     *
+     * @param filepath 待修改的文件路径
+     * @param rawString 待修改的字符串
+     * @param newString 新字符串
+     */
+    public static void changeSpecialChar(String filepath, String rawString, String newString) {
+        Stream<String> lines = FileUtils.gainFileContent(filepath);
+
+        assert lines != null;
+        Stream<String> newLines = lines.map(l -> l.replace(rawString, newString));
+
+        File oldLabelFile = new File(filepath);
+
+        // 写入新文件
+        File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
+        FileUtils.writeLinesToNewFile(newFile, newLines);
+    }
 //    /**
 //     * 规则化标签文件中记录标签的父目录
 //     *
@@ -249,5 +291,27 @@ public class Single {
         FileUtils.removeFiles(interSectionList, evalDir);
 
         return interSectionList;
+    }
+
+
+    /**
+     * 针对开源数据集做的数据标签修正
+     *
+     * @param filepath 标签文件路径
+     */
+    public static void fixEngLabel(String filepath) {
+        Stream<String> lines = FileUtils.gainFileContent(filepath);
+
+        assert lines != null;
+        Stream<String> newLines = lines.map(l -> {
+            String real = l.substring(l.indexOf('_') + 1, l.lastIndexOf('_'));
+            return l.substring(0, l.indexOf(' ') + 1) + real;
+        });
+
+        File oldLabelFile = new File(filepath);
+
+        // 写入新文件
+        File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
+        FileUtils.writeLinesToNewFile(newFile, newLines);
     }
 }

@@ -161,6 +161,30 @@ public class SingleTest {
         Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\alpha_train\\rec_gt.txt", "rec_data");
         Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\alpha_eval\\Label.txt", "det_data");
         Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\alpha_train\\Label.txt", "det_data");
+//        Single.regularizeDirInLabelFile("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\labels.txt", "D:/BaiduNetdiskDownload/DataSet/Chinese_dataset/images", false);
 //        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\ft_rec\\ft.txt", "crop_img");
+    }
+
+    @Test
+    public void opsDir() {
+        Single.changeSpecialChar("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\engTrainLabel.txt", " ", "\t");
+        Single.changeSpecialChar("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\engEvalLabel.txt", " ", "\t");
+    }
+
+
+    @Test
+    public void fixEngLabel() {
+//        Single.fixEngLabel("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\engTrainLabel.txt");
+//        Single.fixEngLabel("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\engEvalLabel.txt");
+        Stream<String> lines = FileUtils.gainFileContent("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\engEvalLabel.txt");
+
+        assert lines != null;
+        Stream<String> newLines = lines.map(l -> l.substring(l.indexOf('/') + 1));
+
+        File oldLabelFile = new File("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\engEvalLabel.txt");
+
+        // 写入新文件
+        File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
+        FileUtils.writeLinesToNewFile(newFile, newLines);
     }
 }
