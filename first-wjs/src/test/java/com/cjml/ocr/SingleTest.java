@@ -12,10 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -166,6 +163,11 @@ public class SingleTest {
     }
 
     @Test
+    public void regularDir2() {
+        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Downloads\\new_train.list", "train_images", false);
+    }
+
+    @Test
     public void opsDir() {
         Single.changeSpecialChar("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\engTrainLabel.txt", " ", "\t");
         Single.changeSpecialChar("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\engEvalLabel.txt", " ", "\t");
@@ -186,5 +188,48 @@ public class SingleTest {
         // 写入新文件
         File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
         FileUtils.writeLinesToNewFile(newFile, newLines);
+    }
+
+    @Test
+    public void fixIndexLabel() {
+        Single.fixIndexLabel("D:\\BaiduNetdiskDownload\\DataSet\\data_train.txt", "C:\\Users\\wujs\\Desktop\\char_std_5990.txt");
+    }
+
+    @Test
+    public void fix21WLabel() {
+//        Single.fixEngLabel("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\engTrainLabel.txt");
+//        Single.fixEngLabel("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\engEvalLabel.txt");
+        Stream<String> lines = FileUtils.gainFileContent("C:\\Users\\wujs\\Downloads\\train.list");
+
+        assert lines != null;
+        Stream<String> newLines = lines.map(l -> l.substring(l.indexOf('i')));
+
+        File oldLabelFile = new File("C:\\Users\\wujs\\Downloads\\train.list");
+
+        // 写入新文件
+        File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
+        FileUtils.writeLinesToNewFile(newFile, newLines);
+    }
+
+    @Test
+    public void generateAugLabel() {
+        int i = 59;
+        String imageDir = "D:\\wjs\\processed_data_set\\alpha_train\\aug_generate\\" + i;
+        String desLabelPath = "D:\\wjs\\processed_data_set\\alpha_train\\augLabel" + i + ".txt";
+        String labelDir = "aug_generate/" + i + "/";
+        String labelName = "56";
+        Single.generateAugLabel(imageDir, desLabelPath, labelDir, labelName);
+    }
+
+    @Test
+    public void mergeLabelContent() {
+        String baseFilename = "D:\\wjs\\processed_data_set\\alpha_train\\augLabel";
+        String newFilePath = "D:\\wjs\\processed_data_set\\alpha_train\\augLabel_01.txt";
+        List<String> filenameList = new ArrayList<>();
+        for (int i = 54; i < 60; i++) {
+            String filename = baseFilename + i + ".txt";
+            filenameList.add(filename);
+        }
+        FileUtils.mergeLabelContent(filenameList, newFilePath);
     }
 }

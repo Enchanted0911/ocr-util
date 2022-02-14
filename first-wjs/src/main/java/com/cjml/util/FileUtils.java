@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -266,5 +267,22 @@ public class FileUtils {
             File newFile = new File(labelPath + com.cjml.constant.CommonConstants.SLASH + x);
             FileUtils.writeLinesToNewFile(newFile, fixedContent.stream());
         });
+    }
+
+    /**
+     * 合成标注文件名集合里的所有标注文件内容到一个标注文件里
+     *
+     * @param filenameList 待合并的标注文件名集合
+     * @param newFilePath 合成的新标注文件路径
+     */
+    public static void mergeLabelContent(List<String> filenameList, String newFilePath) {
+        AtomicReference<Stream<String>> allLines = new AtomicReference<>(new ArrayList<String>().stream());
+        filenameList.forEach(f -> {
+            Stream<String> lines = FileUtils.gainFileContent(f);
+            allLines.set(Stream.concat(allLines.get(), lines));
+        });
+
+        File newFile = new File(newFilePath);
+        FileUtils.writeLinesToNewFile(newFile, allLines.get());
     }
 }

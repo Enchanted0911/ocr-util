@@ -5,10 +5,7 @@ import com.cjml.util.FileUtils;
 import com.cjml.util.ResourceUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -313,5 +310,56 @@ public class Single {
         // 写入新文件
         File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
         FileUtils.writeLinesToNewFile(newFile, newLines);
+    }
+
+    /**
+     * 针对开源数据集做的数据标签修正
+     * 将标签的索引位置修改为直接数据以适应paddle训练数据标签格式
+     *
+     * @param labelPath 标签文件路径
+     * @param dictPath 字典文件路径
+     */
+    public static void fixIndexLabel(String labelPath, String dictPath) {
+        Stream<String> lines = FileUtils.gainFileContent(labelPath);
+
+        List<String> dictLines = Objects.requireNonNull(FileUtils.gainFileContent(dictPath))
+                .collect(Collectors.toList());
+
+        assert lines != null;
+        Stream<String> newLines = lines.map(l -> {
+            String[] s = l.split(" ");
+
+            StringBuilder stringBuilder = new StringBuilder(s[0] + "\t");
+            for (int i = 1; i < s.length; i++) {
+                stringBuilder.append(dictLines.get(Integer.parseInt(s[i])));
+            }
+            return stringBuilder.toString();
+        });
+
+        File oldLabelFile = new File(labelPath);
+
+        // 写入新文件
+        File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
+        FileUtils.writeLinesToNewFile(newFile, newLines);
+    }
+
+    /**
+     * 针对自研增广数据生成标注文件
+     *
+     * @param imageDir 图片目录
+     * @param desLabelPath 标注文件生成路径(包含文件名)
+     * @param labelDir 标注文件的标注数据目录
+     * @param labelName 标注文件的标注内容
+     */
+    public static void generateAugLabel(String imageDir, String desLabelPath, String labelDir, String labelName) {
+        List<String> allImageName = FileUtils.gainAllFileName(imageDir);
+        List<String> labelContent = new ArrayList<>();
+        allImageName.forEach(i -> {
+            String label = labelDir + i + "\t" + labelName;
+            labelContent.add(label);
+        });
+
+        File generateLabelFile = new File(desLabelPath);
+        FileUtils.writeLinesToNewFile(generateLabelFile, labelContent.stream());
     }
 }
