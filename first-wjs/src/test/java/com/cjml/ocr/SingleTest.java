@@ -154,17 +154,16 @@ public class SingleTest {
 
     @Test
     public void regularDir() {
-        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\alpha_eval\\rec_gt.txt", "rec_data");
-        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\alpha_train\\rec_gt.txt", "rec_data");
-        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\alpha_eval\\Label.txt", "det_data");
-        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\alpha_train\\Label.txt", "det_data");
 //        Single.regularizeDirInLabelFile("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\labels.txt", "D:/BaiduNetdiskDownload/DataSet/Chinese_dataset/images", false);
-//        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Desktop\\ft_rec\\ft.txt", "crop_img");
+        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_train\\merge_data\\Label.txt", "det_data");
+        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_train\\merge_data\\rec_gt.txt", "rec_data");
+        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_eval\\merge_data\\Label.txt", "det_data");
+        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_eval\\merge_data\\rec_gt.txt", "rec_data");
     }
 
     @Test
     public void regularDir2() {
-        Single.regularizeDirInLabelFile("C:\\Users\\wujs\\Downloads\\new_train.list", "train_images", false);
+        Single.regularizeDirInLabelFile("C:\\Users\\wujs.YANGCHE\\Downloads\\new_train.list", "train_images", false);
     }
 
     @Test
@@ -192,19 +191,19 @@ public class SingleTest {
 
     @Test
     public void fixIndexLabel() {
-        Single.fixIndexLabel("D:\\BaiduNetdiskDownload\\DataSet\\data_train.txt", "C:\\Users\\wujs\\Desktop\\char_std_5990.txt");
+        Single.fixIndexLabel("D:\\BaiduNetdiskDownload\\DataSet\\data_train.txt", "C:\\Users\\wujs.YANGCHE\\Desktop\\char_std_5990.txt");
     }
 
     @Test
     public void fix21WLabel() {
 //        Single.fixEngLabel("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\engTrainLabel.txt");
 //        Single.fixEngLabel("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\engEvalLabel.txt");
-        Stream<String> lines = FileUtils.gainFileContent("C:\\Users\\wujs\\Downloads\\train.list");
+        Stream<String> lines = FileUtils.gainFileContent("C:\\Users\\wujs.YANGCHE\\Downloads\\train.list");
 
         assert lines != null;
         Stream<String> newLines = lines.map(l -> l.substring(l.indexOf('i')));
 
-        File oldLabelFile = new File("C:\\Users\\wujs\\Downloads\\train.list");
+        File oldLabelFile = new File("C:\\Users\\wujs.YANGCHE\\Downloads\\train.list");
 
         // 写入新文件
         File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
@@ -213,11 +212,11 @@ public class SingleTest {
 
     @Test
     public void generateAugLabel() {
-        int i = 59;
+        int i = 108;
         String imageDir = "D:\\wjs\\processed_data_set\\alpha_train\\aug_generate\\" + i;
         String desLabelPath = "D:\\wjs\\processed_data_set\\alpha_train\\augLabel" + i + ".txt";
         String labelDir = "aug_generate/" + i + "/";
-        String labelName = "56";
+        String labelName = "盛";
         Single.generateAugLabel(imageDir, desLabelPath, labelDir, labelName);
     }
 
@@ -226,7 +225,7 @@ public class SingleTest {
         String baseFilename = "D:\\wjs\\processed_data_set\\alpha_train\\augLabel";
         String newFilePath = "D:\\wjs\\processed_data_set\\alpha_train\\augLabel_01.txt";
         List<String> filenameList = new ArrayList<>();
-        for (int i = 54; i < 60; i++) {
+        for (int i = 101; i < 109; i++) {
             String filename = baseFilename + i + ".txt";
             filenameList.add(filename);
         }

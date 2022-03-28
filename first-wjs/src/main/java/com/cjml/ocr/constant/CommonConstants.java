@@ -20,6 +20,7 @@ public interface CommonConstants {
     String LABEL_TXT = "Label.txt";
     String REC_GT_TXT = "rec_gt.txt";
     String TXT = ".txt";
+    String THUMBS_DB = "Thumbs.db";
     String START_TIME = "start-time";
     String END_TIME = "end-time";
     String ALIGN_EVAL_REC_FILE = "align-eval-rec-file";

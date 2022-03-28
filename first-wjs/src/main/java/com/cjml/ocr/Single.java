@@ -32,13 +32,7 @@ public class Single {
     public static String alignTrainRecFile = ResourceUtils.gainValueByKey(CommonConstants.FILE_DIR_PROPERTIES, CommonConstants.ALIGN_TRAIN_REC_FILE);
 
     public static void main(String[] args) {
-//        alignLabelAndDataSet();
-//        singleDetTrainEval();
         fullClean();
-//        halfClean();
-//        simpleSingleDetTrainEval(trainDetDir, evalDetDir, evalDetLabelPath);
-//        regularizeDirInLabelFile(alignTrainRecFile, "rec_data");
-//        alignLabelAndDataSet(alignTrainDetFile, alignTrainDetDir);
     }
 
 
@@ -59,14 +53,6 @@ public class Single {
 
         alignLabelAndDataSet(alignTrainRecFile, alignTrainRecDir);
         alignLabelAndDataSet(alignTrainDetFile, alignTrainDetDir);
-    }
-
-    public static void halfClean() {
-
-        alignDetAndRecDataSet("C:\\Users\\Administrator\\Desktop\\alpha_eval\\XZM", "C:\\Users\\Administrator\\Desktop\\alpha_eval\\XZM\\crop_img");
-
-        alignLabelAndDataSet("C:\\Users\\Administrator\\Desktop\\alpha_eval\\XZM\\rec_gt.txt", "C:\\Users\\Administrator\\Desktop\\alpha_eval\\XZM\\crop_img");
-        alignLabelAndDataSet("C:\\Users\\Administrator\\Desktop\\alpha_eval\\XZM\\Label.txt", "C:\\Users\\Administrator\\Desktop\\alpha_eval\\XZM");
     }
 
     /**

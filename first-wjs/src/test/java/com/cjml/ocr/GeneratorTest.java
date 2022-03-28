@@ -4,6 +4,8 @@ import com.cjml.detection.Generator;
 import com.cjml.util.FileUtils;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * @author johnson
  * @date 2021-11-10
@@ -25,5 +27,12 @@ public class GeneratorTest {
 
         FileUtils.processXmlFile(path, one, two, labelName);
 
+    }
+
+    @Test
+    public void findMultiTest() {
+        String fileDir = "D:\\wjs\\detection_data_set\\alpha\\annotations";
+        List<String> resList = Generator.findMultiObjectLabel(fileDir);
+        resList.forEach(System.out::println);
     }
 }

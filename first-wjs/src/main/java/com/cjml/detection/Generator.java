@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author johnson
@@ -138,5 +139,25 @@ public class Generator {
         }).collect(Collectors.toList());
 
         return noLabelList;
+    }
+
+    /**
+     * 找到标注了一个以上的目标的标注文件
+     *
+     * @param fileDir 待查找的目录
+     * @return 所有标注了一个以上目标的标注文件名
+     */
+    public static List<String> findMultiObjectLabel(String fileDir) {
+        List<String> filenameList = new ArrayList<>();
+        List<File> annotationFileList = new ArrayList<>();
+        FileUtils.gainAllFile(new File(fileDir), annotationFileList);
+        annotationFileList.forEach(f -> {
+            Stream<String> lines = FileUtils.gainFileContent(f.getAbsolutePath());
+            long num = lines.filter(l -> l.contains("<object>")).count();
+            if (num > 1) {
+                filenameList.add(f.getAbsolutePath());
+            }
+        });
+        return filenameList;
     }
 }

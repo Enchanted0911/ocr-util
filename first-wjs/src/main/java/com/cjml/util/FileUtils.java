@@ -26,7 +26,7 @@ import java.util.stream.Stream;
  */
 public class FileUtils {
 
-    public static List<String> commonList;
+    public static final List<String> commonList;
 
     static {
         commonList = new ArrayList<>();
@@ -36,6 +36,7 @@ public class FileUtils {
         commonList.add(CommonConstants.LABEL_TXT);
         commonList.add(CommonConstants.REC_GT_TXT);
         commonList.add(CommonConstants.TXT);
+        commonList.add(CommonConstants.THUMBS_DB);
     }
 
     /**
