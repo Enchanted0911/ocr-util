@@ -157,8 +157,8 @@ public class SingleTest {
 //        Single.regularizeDirInLabelFile("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\labels.txt", "D:/BaiduNetdiskDownload/DataSet/Chinese_dataset/images", false);
         Single.regularizeDirInLabelFile("D:\\wjs\\ocr_train\\merge_data\\Label.txt", "det_data");
         Single.regularizeDirInLabelFile("D:\\wjs\\ocr_train\\merge_data\\rec_gt.txt", "rec_data");
-        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_eval\\merge_data\\Label.txt", "det_data");
-        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_eval\\merge_data\\rec_gt.txt", "rec_data");
+//        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_eval\\merge_data\\Label.txt", "det_data");
+//        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_eval\\merge_data\\rec_gt.txt", "rec_data");
     }
 
     @Test

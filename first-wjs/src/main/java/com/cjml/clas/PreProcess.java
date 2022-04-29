@@ -24,15 +24,15 @@ public class PreProcess {
     public static void main(String[] args) {
 
         // 分割训练集和评估集
-        FileUtils.separateFile(trainClassDir, evalClassDir);
-
-        // 生成标注文件
+//        FileUtils.separateFile(trainClassDir, evalClassDir);
+//
+//        // 生成标注文件
         dataSetProcess(trainClassDir);
         dataSetProcess(evalClassDir);
 
-        // 去除中文标签
-//        FileUtils.filterChinese(trainFilterChineseLabelPath);
-//        FileUtils.filterChinese(evalFilterChineseLabelPath);
+//         去除中文标签
+        FileUtils.filterChinese(trainFilterChineseLabelPath);
+        FileUtils.filterChinese(evalFilterChineseLabelPath);
     }
 
     /**

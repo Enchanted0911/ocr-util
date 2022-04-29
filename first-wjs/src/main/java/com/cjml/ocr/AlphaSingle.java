@@ -21,7 +21,7 @@ public class AlphaSingle {
 //        cleanDetIntersection("D:\\wjs\\ocr_data_set_clean");
 //        cleanOthersIntersection("D:\\wjs\\ocr_data_set_clean");
         mergeDataSet("D:\\wjs\\ocr_train");
-        mergeDataSet("D:\\wjs\\ocr_eval");
+//        mergeDataSet("D:\\wjs\\ocr_eval");
 //        resetLabelCache("D:\\wjs\\ocr_data_set_clean");
     }
 
