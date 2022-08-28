@@ -23,16 +23,20 @@ public class PreProcess {
 
     public static void main(String[] args) {
 
+        String dir = "C:\\Users\\wujs.YANGCHE\\Desktop\\temp_sort";
+
         // 分割训练集和评估集
 //        FileUtils.separateFile(trainClassDir, evalClassDir);
 //
 //        // 生成标注文件
         dataSetProcess(trainClassDir);
         dataSetProcess(evalClassDir);
+//        dataSetProcess(dir);
 
 //         去除中文标签
         FileUtils.filterChinese(trainFilterChineseLabelPath);
         FileUtils.filterChinese(evalFilterChineseLabelPath);
+//        FileUtils.filterChinese(dir + "\\Label.txt");
     }
 
     /**

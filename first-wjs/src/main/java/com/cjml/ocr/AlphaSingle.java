@@ -20,9 +20,11 @@ public class AlphaSingle {
     public static void main(String[] args) {
 //        cleanDetIntersection("D:\\wjs\\ocr_data_set_clean");
 //        cleanOthersIntersection("D:\\wjs\\ocr_data_set_clean");
-        mergeDataSet("D:\\wjs\\ocr_train");
-//        mergeDataSet("D:\\wjs\\ocr_eval");
-//        resetLabelCache("D:\\wjs\\ocr_data_set_clean");
+//        mergeDataSet("D:\\wjs\\ocr_train_nameplate");
+//        mergeDataSet("D:\\wjs\\ocr_eval_nameplate");
+        mergeDataSet("D:\\wjs\\ocr_eval_vin");
+        mergeDataSet("D:\\wjs\\ocr_train_vin");
+//        resetLabelCache("D:\\wjs\\ocr_data_set_clean", "240");
     }
 
 
@@ -68,9 +70,9 @@ public class AlphaSingle {
         assert fs != null;
         for (File f : fs) {
             alignDetAndRecDataSet(f.getAbsolutePath(), f.getAbsolutePath() + "\\crop_img");
-            alignLabelAndDataSet(f.getAbsolutePath() + "\\Label.txt", f.getAbsolutePath());
+            alignLabelAndDataSet(f.getAbsolutePath() + "\\Label.txt", f.getAbsolutePath(), false);
             alignLabelAndDataSet(f.getAbsolutePath() + "\\rec_gt.txt"
-                    , f.getAbsolutePath() + "\\crop_img");
+                    , f.getAbsolutePath() + "\\crop_img", true);
         }
     }
 
@@ -166,8 +168,7 @@ public class AlphaSingle {
      * @param labelPath 标签文件路径
      * @param dataDir   数据文件目录
      */
-    public static void alignLabelAndDataSet(String labelPath, String dataDir) {
-
+    public static void alignLabelAndDataSet(String labelPath, String dataDir, boolean flag) {
         // 获取目录下的所有文件名集合
         List<String> dataNameList = FileUtils.gainAllFileName(dataDir);
 
@@ -176,18 +177,30 @@ public class AlphaSingle {
         assert lines != null;
 
         // 将文本文件中的内容过滤掉文件名集合中不存在的数据的记录
-        Stream<String> filterLines = lines.filter(l -> dataNameList.stream().anyMatch(l::contains));
+        Stream<String> filterLines;
+        if (flag) {
+            filterLines = lines.filter(l -> dataNameList.stream().anyMatch(l::contains) && !l.contains("无法识别") && !l.contains("待识别") && !l.contains("TEMPORARY"));
+        } else {
+            filterLines = lines.filter(l -> dataNameList.stream().anyMatch(l::contains));
+        }
+
 
         List<String> filterList = filterLines.collect(Collectors.toList());
         Stream<String> filterLines2 = filterList.stream();
         FileUtils.writeLinesToNewFile(new File(labelPath), filterLines2);
     }
 
-    public static void resetLabelCache(String dirPath){
+    public static void resetLabelCache(String dirPath, String subDir){
         File dirPathFile = new File(dirPath);
         File[] fs = dirPathFile.listFiles();
         assert fs != null;
         for (File f : fs) {
+
+            if (!f.getName().equals(subDir)){
+                System.out.println("next------------");
+                continue;
+            }
+
             List<String> cacheList = new ArrayList<>();
             File[] subFileList = f.listFiles();
             assert subFileList != null;
