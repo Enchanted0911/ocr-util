@@ -77,8 +77,27 @@ public class FileUtils {
      */
     public static void removeFiles(List<String> fileNameList, String filePath) {
         fileNameList.forEach(i -> {
-            File file = new File(filePath + "/" + i);
+            File file = new File(filePath + File.separatorChar + i);
             file.delete();
+        });
+    }
+
+    /**
+     * 批量移动文件
+     *
+     * @param fileNameList 待移动文件名集合
+     * @param sourceDir    待移动文件源文件夹
+     * @param desDir       移动的目的文件夹
+     */
+    public static void moveFiles(List<String> fileNameList, String sourceDir, String desDir) {
+        File file = new File(desDir);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        fileNameList.forEach(i -> {
+            File sf = new File(sourceDir + File.separatorChar + i);
+            File df = new File(desDir + File.separatorChar + i);
+            sf.renameTo(df);
         });
     }
 
@@ -180,7 +199,7 @@ public class FileUtils {
      * 将数据分成训练集和评估集
      *
      * @param originFileDir 原始数据目录
-     * @param desFileDir 目的数据目录
+     * @param desFileDir    目的数据目录
      */
     public static void separateFile(String originFileDir, String desFileDir) {
         File originFile = new File(originFileDir);
@@ -247,16 +266,16 @@ public class FileUtils {
      * 将xml文件中的两个特定标签修改为特定值
      * 针对detection数据标签的清洗
      *
-     * @param labelPath 标签路径
+     * @param labelPath    标签路径
      * @param editLabelOne 待修改标签一
      * @param editLabelTwo 待修改标签二
-     * @param newLabel 修改后标签
+     * @param newLabel     修改后标签
      */
     public static void processXmlFile(String labelPath, String editLabelOne, String editLabelTwo, String newLabel) {
         List<String> list = FileUtils.gainAllFileName(labelPath);
 
         list.forEach(x -> {
-            Stream<String> content = FileUtils.gainFileContent(labelPath  + com.cjml.constant.CommonConstants.SLASH + x);
+            Stream<String> content = FileUtils.gainFileContent(labelPath + com.cjml.constant.CommonConstants.SLASH + x);
             List<String> fixedContent = new ArrayList<>();
             assert content != null;
             content.forEach(i -> {
@@ -274,7 +293,7 @@ public class FileUtils {
      * 合成标注文件名集合里的所有标注文件内容到一个标注文件里
      *
      * @param filenameList 待合并的标注文件名集合
-     * @param newFilePath 合成的新标注文件路径
+     * @param newFilePath  合成的新标注文件路径
      */
     public static void mergeLabelContent(List<String> filenameList, String newFilePath) {
         AtomicReference<Stream<String>> allLines = new AtomicReference<>(new ArrayList<String>().stream());
@@ -286,4 +305,35 @@ public class FileUtils {
         File newFile = new File(newFilePath);
         FileUtils.writeLinesToNewFile(newFile, allLines.get());
     }
+
+    public static void cleanNotNeed(String standDirPath, String editDirPath) {
+        var standDir = new File(standDirPath);
+        var editDir = new File(editDirPath);
+        File[] standFs = standDir.listFiles();
+        File[] editFs = editDir.listFiles();
+        assert editFs != null;
+        assert standFs != null;
+        var standName = Arrays.stream(standFs).map(File::getName).collect(Collectors.toList());
+        var editName = Arrays.stream(editFs).map(File::getName).collect(Collectors.toList());
+        var res = editName.stream().filter(e -> !standName.contains(e)).collect(Collectors.toList());
+        System.out.println(res.size());
+        removeFiles(res, editDirPath);
+    }
+
+    public static void moveNotNeed(String standDirPath, String editDirPath) {
+        var standDir = new File(standDirPath);
+        var editDir = new File(editDirPath);
+        String desDirPath = editDirPath + "_move";
+        System.out.println(desDirPath);
+        File[] standFs = standDir.listFiles();
+        File[] editFs = editDir.listFiles();
+        assert editFs != null;
+        assert standFs != null;
+        var standName = Arrays.stream(standFs).map(File::getName).collect(Collectors.toList());
+        var editName = Arrays.stream(editFs).map(File::getName).collect(Collectors.toList());
+        var res = editName.stream().filter(e -> !standName.contains(e)).collect(Collectors.toList());
+        System.out.println(res.size());
+        moveFiles(res, editDirPath, desDirPath);
+    }
+
 }

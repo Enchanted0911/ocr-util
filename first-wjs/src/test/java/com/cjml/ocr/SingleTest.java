@@ -17,6 +17,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.cjml.ocr.AlphaSingle.generateCharAug;
+
 /**
  * @author johnson
  * @date 2021-11-10
@@ -62,109 +64,21 @@ public class SingleTest {
     }
 
     @Test
-    public void threeTest() {
-        System.out.println(trainDir);
-    }
-
-    @Test
-    public void showFileContentTest() {
-        System.out.println(testDir);
-        File testFile = new File(testDir);
-        List<String> trainFileList = Arrays.stream(testFile.list()).collect(Collectors.toList());
-        trainFileList.forEach(System.out::println);
-    }
-
-    @Test
-    public void readFileContentTest() {
-
-        AtomicInteger i = new AtomicInteger();
-        System.out.println(detLabelPath);
-        Stream<String> lines = null;
-        try {
-            lines = Files.lines(Paths.get("C:\\Users\\Administrator\\Desktop\\old_pic_2\\newLabel.txt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // 随机行顺序进行数据处理
-        assert lines != null;
-        lines.forEachOrdered(l -> System.out.println(i.getAndIncrement() + " : " + l));
-    }
-
-    @Test
-    public void showRecInter() {
-        // 分别列出两个目录的所有文件名
-        List<String> trainFileList = FileUtils.gainAllFileName(trainDir);
-        List<String> evalFileList = FileUtils.gainAllFileName(evalDir);
-
-        // 求文件名交集
-        List<String> interSectionList = FileUtils.gainIntersection(trainFileList, evalFileList);
-
-        // 获取rec目录下的文件
-        List<String> recFileList = FileUtils.gainAllFileName(recDir);
-
-        // 获取rec数据集中的由以上代码得出的交集部分产生的图片
-        List<String> recIntersectionList = recFileList.stream().filter(r -> interSectionList.stream()
-                .anyMatch(i -> r.contains(i.substring(0, i.lastIndexOf("."))))).collect(Collectors.toList());
-        System.out.println(interSectionList);
-        System.out.println(interSectionList.size());
-        System.out.println(recIntersectionList);
-        System.out.println(recIntersectionList.size());
-    }
-
-    @Test
-    public void writeFileContentTest() {
-        File detLabelFile = new File(detLabelPath);
-        String detLabelParentDir = detLabelFile.getParent();
-        Stream<String> lines = null;
-        try {
-            lines = Files.lines(Paths.get(detLabelPath));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        File newFile = new File(detLabelParentDir + "/newLabel.txt");
-        FileWriter fileWriter = null;
-        try {
-            if (!newFile.exists()) {
-                newFile.createNewFile();
-            }
-            fileWriter = new FileWriter(newFile);
-            FileWriter finalFileWriter = fileWriter;
-            assert lines != null;
-            lines.forEach(l -> {
-                try {
-                    finalFileWriter.append(l).append("\n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (fileWriter != null) {
-                try {
-                    fileWriter.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    @Test
     public void regularDir() {
-//        Single.regularizeDirInLabelFile("D:\\BaiduNetdiskDownload\\DataSet\\Chinese_dataset\\labels.txt", "D:/BaiduNetdiskDownload/DataSet/Chinese_dataset/images", false);
 //        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_train_nameplate\\merge_data\\Label.txt", "det_nameplate_train");
 //        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_train_nameplate\\merge_data\\rec_gt.txt", "rec_nameplate_train");
 //        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_eval_nameplate\\merge_data\\Label.txt", "det_nameplate_eval");
 //        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_eval_nameplate\\merge_data\\rec_gt.txt", "rec_nameplate_eval");
 //        Single.regularizeDirInLabelFile("D:\\wjs\\PycharmProjects\\end2end_eval\\Label_hard.txt", "200difficult_1");
-        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_eval_vin\\merge_data\\Label.txt", "det_vin_eval");
-        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_eval_vin\\merge_data\\rec_gt.txt", "rec_vin_eval");
-        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_train_vin\\merge_data\\Label.txt", "det_vin_train");
-        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_train_vin\\merge_data\\rec_gt.txt", "rec_vin_train");
-//        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_train\\rec_gt.txt", "rec_data");
+//        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_eval_vin\\merge_data\\Label.txt", "det_vin_eval");
+//        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_eval_vin\\merge_data\\rec_gt.txt", "rec_vin_eval");
+//        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_train_vin\\merge_data\\Label.txt", "det_vin_train");
+//        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_train_vin\\merge_data\\rec_gt.txt", "rec_vin_train");
+//        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_data_set_clean\\vin_250_license\\rec_gt.txt", "rec_temp_eval");
+//        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_data_set_clean\\second_1k\\rec_gt.txt", "rec_temp_train");
+//        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_temp_eval\\merge_data\\Label.txt", "rec_temp_eval");
+        Single.regularizeDirInLabelFile("D:\\wjs\\ocr_temp_train\\merge_data\\Label.txt", "rec_temp_train");
+//        Single.regularizeDirInLabelFile("D:\\wjs\\4label\\just_vin_500\\Label.txt", "det_vin_train");
     }
 
     @Test
@@ -218,11 +132,11 @@ public class SingleTest {
 
     @Test
     public void generateAugLabel() {
-        int i = 353;
+        int i = 379;
         String imageDir = "D:\\wjs\\processed_data_set\\aug_generate\\" + i;
         String desLabelPath = "D:\\wjs\\processed_data_set\\augLabel" + i + ".txt";
         String labelDir = "aug_generate/" + i + "/";
-        String labelName = "G";
+        String labelName = "C";
         Single.generateAugLabel(imageDir, desLabelPath, labelDir, labelName);
     }
 
@@ -231,7 +145,10 @@ public class SingleTest {
         String baseFilename = "D:\\wjs\\processed_data_set\\augLabel";
         String newFilePath = "D:\\wjs\\processed_data_set\\augLabel_01.txt";
         List<String> filenameList = new ArrayList<>();
-        for (int i = 339; i < 354; i++) {
+        for (int i = 366; i < 380; i++) {
+            if (i == 374){
+                continue;
+            }
             String filename = baseFilename + i + ".txt";
             filenameList.add(filename);
         }
@@ -266,9 +183,25 @@ public class SingleTest {
     }
 
     @Test
+    public void departAugLabel2() {
+        String sLabel = "D:\\wjs\\processed_data_set\\augLabel.txt";
+        String dLabel_hard = "D:\\wjs\\processed_data_set\\augLabel_hard.txt";
+        String dLabel = "D:\\wjs\\processed_data_set\\augLabel_new.txt";
+        String[] v = {"16", "23", ""
+        };
+        List<String> vList = Arrays.asList(v);
+        Stream<String> hardLabel = FileUtils.gainFileContent(sLabel)
+                .filter(s -> vList.contains(s.substring(s.indexOf("/") + 1, s.lastIndexOf("/"))));
+        Stream<String> label = FileUtils.gainFileContent(sLabel)
+                .filter(s -> !vList.contains(s.substring(s.indexOf("/") + 1, s.lastIndexOf("/"))));
+        FileUtils.writeLinesToNewFile(new File(dLabel_hard), hardLabel);
+        FileUtils.writeLinesToNewFile(new File(dLabel), label);
+    }
+
+    @Test
     public void cleanNotExist() {
-        String label = "D:\\wjs\\processed_data_set\\augLabel_hard.txt";
-        String cleanDir = "D:\\wjs\\processed_data_set\\aug_hard";
+        String label = "D:\\wjs\\processed_data_set\\augLabel_new_0915.txt";
+        String cleanDir = "D:\\wjs\\processed_data_set\\aug_generate";
         File cleanFile = new File(cleanDir);
         File[] list = cleanFile.listFiles();
         List<String> allList = new ArrayList<>();
@@ -280,6 +213,68 @@ public class SingleTest {
             }
         }
         Stream<String> stringStream = FileUtils.gainFileContent(label).filter(l -> allList.stream().anyMatch(l::contains));
-        FileUtils.writeLinesToNewFile(new File("D:\\wjs\\processed_data_set\\augLabel_hard_clean.txt"), stringStream);
+        FileUtils.writeLinesToNewFile(new File("D:\\wjs\\processed_data_set\\augLabel_new_0915_clean.txt"), stringStream);
+    }
+
+    @Test
+    public void fixSomething(){
+        String filepath = "D:\\wjs\\PycharmProjects\\end2end_eval\\diff_eval.txt";
+        Stream<String> lines = FileUtils.gainFileContent(filepath);
+
+        assert lines != null;
+        Stream<String> newLines = lines.filter(l -> {
+            var x = l.split(" ");
+            if (x[2].length() == 4) {
+                return true;
+            }
+            x[2] = x[2].substring(2, 19);
+            return !x[1].equals(x[2]);
+        }).map(l -> l.replace("['", "").replace("']", ""));
+
+        File oldLabelFile = new File(filepath);
+
+        // 写入新文件
+        File newFile = new File(oldLabelFile.getParent() + "/new_" + oldLabelFile.getName());
+        FileUtils.writeLinesToNewFile(newFile, newLines);
+
+    }
+
+    @Test
+    public void xxx11(){
+        String x = "D:\\diff_vin_eval_5k_old\\1";
+        String y = "D:\\wjs\\4label\\vin_1k";
+//        FileUtils.cleanNotNeed(x, y);
+
+        FileUtils.moveNotNeed(x, y);
+    }
+
+    @Test
+    public void statistic(){
+        String filePath = "D:\\wjs\\ocr_temp_train\\merge_data\\new_rec_gt.txt";
+        var fileContent = FileUtils.gainFileContent(filePath).collect(Collectors.toList());
+        var staMap = new HashMap<Character, Integer>(256);
+        var staResList = new ArrayList<String>();
+        fileContent.forEach(fc -> {
+            var path = fc.split("\t")[0];
+            var rec = fc.split("\t")[1].replace("\n", "");
+            for (var i = 0; i < rec.length(); i++) {
+                if (staMap.containsKey(rec.charAt(i))) {
+                    staMap.put(rec.charAt(i), staMap.get(rec.charAt(i)) + 1);
+                } else {
+                    staMap.put(rec.charAt(i), 1);
+                }
+            }
+        });
+        for (var i = 'A'; i <= 'Z'; i++) {
+            System.out.println(i + "---------" + staMap.get(i));
+        }
+        for (var i = '0'; i <= '9'; i++) {
+            System.out.println(i + "---------" + staMap.get(i));
+        }
+    }
+
+    @Test
+    public void generateCharAugLabel(){
+        generateCharAug();
     }
 }
